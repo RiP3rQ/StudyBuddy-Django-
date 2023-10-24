@@ -5,11 +5,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm
 from .models import Room, Topic
 from .forms import RoomForm
 
 # Create your views here.
 def loginPage(request):
+    page = 'login'
+
     if request.user.is_authenticated:
         return redirect('core:home')
 
@@ -29,12 +32,33 @@ def loginPage(request):
             return redirect('core:home')
         else:
             messages.error(request, 'Username OR password does not exit')
+
+    context = {'page': page}
         
-    return render(request, 'core/login_register.html')
+    return render(request, 'core/login_register.html', context)
 
 def logoutUser(request):
     logout(request)
     return redirect('core:login')
+
+def registerPage(request):
+    page = 'register'
+
+    form = UserCreationForm()
+
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user=form.save(commit=False)
+            user.username = user.username.lower()
+            user.save()
+            login(request, user)
+            return redirect('core:home')
+        else:
+            messages.error(request, 'An error has occured during registration')
+
+    context = {'page': page, 'form': form}
+    return render(request, 'core/login_register.html', context)
 
 
 def home(request):

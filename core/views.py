@@ -27,6 +27,11 @@ def loginPage(request):
         
     return render(request, 'core/login_register.html')
 
+def logoutUser(request):
+    logout(request)
+    return redirect('core:login')
+
+
 def home(request):
     q= request.GET.get('q') if request.GET.get('q') != None else ''
 

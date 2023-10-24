@@ -3,7 +3,7 @@
 {% block content %}
 
 <div>
-    <h1>Are you sure you want to delete {{room.name}}?</h1>
+    <h1>Are you sure you want to delete "{{obj}}"?</h1>
     <form method="POST" action="">
         {% csrf_token %}
         <input type="submit" value="Delete">

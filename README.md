@@ -9,7 +9,6 @@ Fullstack website with main focus on backend created using Django Framework and 
 - **Django**
 - **Django REST**
 - **PYTHON**
-- **Thirdweb**
 - **HTML**
 - **SQLite**
 - *CSS*

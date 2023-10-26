@@ -14,22 +14,22 @@ def loginPage(request):
     page = 'login'
 
     if request.user.is_authenticated:
-        return redirect('core:home')
+        return redirect('home')
 
     if request.method == 'POST':
-        username = request.POST.get('username')
+        email = request.POST.get('email').lower()
         password = request.POST.get('password')
 
         try:
-            user = User.objects.get(username=username)
+            user = User.objects.get(email=email)
         except:
-            messages.error(request, 'Username does not exit')
+            messages.error(request, 'User does not exist')
 
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, email=email, password=password)
 
         if user is not None:
             login(request, user)
-            return redirect('core:home')
+            return redirect('home')
         else:
             messages.error(request, 'Username OR password does not exit')
 
@@ -84,6 +84,10 @@ def userProfile(request, pk):
     context = {'user': user, 'rooms': rooms,
                'room_messages': room_messages, 'topics': topics}
     return render(request, 'core/profile.html', context)
+
+def updateUser(request):
+    context = {}
+    return render(request, 'core/update-user.html', context)
 
 def room(request, pk):
     room = Room.objects.get(id=pk)
@@ -161,3 +165,11 @@ def deleteMessage(request, pk):
     
     # step 1 - approve deleting of the message
     return render(request, 'core/delete.html' , {'obj': message})
+
+def topicsPage(request):
+    context = {}
+    return render(request, 'core/topics.html', context)
+
+def activityPage(request):
+    context = {}
+    return render(request, 'core/activity.html', context)
